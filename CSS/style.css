@@ -1,0 +1,17 @@
+.X-Icon{
+    width: 30px;
+    height: 30px;
+}
+.btn-Icon{
+    color: black;
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    transition: all .2s;
+}
+.btn-Icon:hover{
+    color: white;
+    background-color: red;
+    border-radius: 50%;
+    border: 1;
+}
