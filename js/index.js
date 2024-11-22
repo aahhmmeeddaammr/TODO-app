@@ -102,43 +102,52 @@ var arr2=[1,21,3]
 // Tasks =>[]        []     Tasks =STasks
 // Tasks => [Task]   [Task]    Tasks = STasks
 //                   null   Tasks = []
+
+var CreateBtn = document.getElementById("CreateBtn")
+var UpdateBtn = document.getElementById("UpdateBtn")
+var TasksContainer = document.getElementById("Tasks")
+var input = document.getElementById("floatingInputGroup1")
+var UpdateIndex = 0;
 var Tasks =[]
-var STasks = JSON.parse(localStorage.getItem("Tasks")) 
+var STasks = JSON.parse(localStorage.getItem("Tasks"))
+
+
+
 if(STasks != null){
     Tasks = STasks
 }else{
     Tasks = []
 }
 
-// console.log(TasksContainer);
-
-function taskToHTML(task){
+function taskToHTML(task
+     , index
+){
     var lineTrough=""
-    // console.log(task);
     if(task.Done){
         lineTrough = "text-decoration-line-through"        
     }
     return`<div class="Task d-flex justify-content-between alert alert-warning align-items-center">
     <div class="">
-    <p class="p-0 ${lineTrough}" onclick="doneTask(${task.index})">${task.TaskHeader}</p>
+    <p class="p-0 ${lineTrough}" onclick="doneTask(${index})">${task.TaskHeader}</p>
     </div>
-    <button class="btn-Icon" onclick="deleteTask(${task.index})">
+    <div>
+    <button class="btn-Icon" onclick="deleteTask(${index})">
     
     <i class="fa-solid fa-trash"></i>
                 </button>
+                <button class="btn-Icon" onclick="Update(${index})">
+    
+    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+    </div>
             </div>`
 }
-
-var TasksContainer = document.getElementById("Tasks")
-
-var input = document.getElementById("floatingInputGroup1")
 
 function addTask(){
     var taskHeader = input.value;
     input.value=""
     var newTask = {
         TaskHeader :taskHeader,
-        index:Tasks.length,
         Done:false
     }
     Tasks.push(newTask)    
@@ -147,13 +156,6 @@ function addTask(){
 }
 
 function doneTask(index){
-    // console.log("Ahmed");
-    
-    // Done = True  == >False 
-    // False = True  !
-    // False  =  True 
-    // True = false 
-
     Tasks[index].Done = ! Tasks[index].Done ;
     addToLocalStorage(Tasks) 
     displayTasks();  
@@ -165,11 +167,10 @@ function deleteTask(index){
     displayTasks();  
 }
 
-
 function displayTasks(){
     TasksContainer.innerHTML  = ""
-    for(var  i =0 ; i < Tasks.length  ;i++){
-        TasksContainer.innerHTML += taskToHTML(Tasks[i]);        
+    for(var  i =0 ; i < Tasks.length  ;i++){        
+        TasksContainer.innerHTML += taskToHTML(Tasks[i] , i);        
     }
 }
 
@@ -178,13 +179,25 @@ function addToLocalStorage(array){
     localStorage.setItem("Tasks" , JSONTasks);
 }
 
-displayTasks()
-
-
-
-function sum(){
-    console.log(Tasks);
+function editTask(){
+    var NewTaskHeader = input.value;
+    Tasks[UpdateIndex].TaskHeader = NewTaskHeader;
+    Tasks[UpdateIndex].Done = false;
+    displayTasks()
+    input.value = ""
+    UpdateBtn.style.display = "none";
+    CreateBtn.style.display = "block";
+    addToLocalStorage(Tasks);
 }
+
+function Update(index){    
+    UpdateIndex = index;
+    input.value = Tasks[index].TaskHeader;
+    UpdateBtn.style.display = "block";
+    CreateBtn.style.display = "none";
+}
+
+displayTasks()
 
 // sum(Tasks)
 // // Key  
